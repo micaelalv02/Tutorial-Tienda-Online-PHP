@@ -1,0 +1,17 @@
+{
+    "name": "pilmica/tiendaoline",
+    "description": "Creacion de tienda online",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mica"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "classes\\": "src/"
+        }
+    }
+}
