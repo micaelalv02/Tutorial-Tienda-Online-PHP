@@ -2,6 +2,8 @@
 
 namespace classes;
 
+use PDOException;
+
 class Pelicula
 {
     private $config;
@@ -10,22 +12,19 @@ class Pelicula
     public function __construct()
     {
         $this->config = parse_ini_file(__DIR__ . '/../config.ini');
-        $this->connect = new \PDO(
-            $this->config['dns'],
-            $this->config['usuario'],
-            $this->config['clave'],
+        $this->connect = new \PDO($this->config['dns'],$this->config['usuario'],$this->config['clave'],
             array(
-                \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
-            )
-        );
+                \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,\PDO::ATTR_EMULATE_PREPARES => false
+            ));
     }
 
     public function registrar($param)
     {
-        $sql = "INSERT INTO `peliculas`(`title`, `description`, `image`, `price`, `category_id`, `date`) VALUES (:title,:description,:image,:price,:category_id,:date)";
-        
+        //var_dump($param);
+        $sql = "INSERT INTO `mica`.`peliculas` (`title`, `description`, `image`, `price`, `category_id`, `date`) VALUES ('".$param['title']."','".$param['description']."','".$param['image']."','".$param['price']."','".$param['category_id']."','".$param['date']."')";
+        var_dump($sql);
         $resultado = $this->connect->prepare($sql);
-
+        
         $array = array(
             ":title" => $param['title'],
             ":description" => $param['description'],
@@ -34,17 +33,21 @@ class Pelicula
             ":category_id" => $param['category_id'],
             ":date" => $param['date']
         );
+        try{
+            
+            $resultado->execute(); 
+            //var_dump($resultado->execute());
+            return true; 
 
-        if ($resultado->execute($array)) {
-            return true;
-        } else {
-            return false;
+        }catch(PDOException $e){
+            var_dump($e);
+        return false;
         }
     }
 
     public function actualizar($param)
     {
-        $sql = "UPDATE `peliculas` SET `title`=:title,`description`=:description,`image`=:image,`price`=:price,`category_id`=:category_id,`date`=:date WHERE `id`=:id";
+        $sql = "UPDATE `mica`.`peliculas` SET `title`=:title,`description`=:description,`image`=:image,`price`=:price,`category_id`=:category_id,`date`=:date WHERE `id`=:id";
 
         $resultado = $this->connect->prepare($sql);
 
@@ -65,14 +68,14 @@ class Pelicula
         }
     }
 
-    public function eliminar($id, $param)
+    public function eliminar($id)
     {
-        $sql = "DELETE FROM `peliculas` WHERE `id`=:id";
+        $sql = "DELETE FROM `mica`.`peliculas` WHERE `id`=:id";
 
         $resultado = $this->connect->prepare($sql);
 
         $array = array(
-            ":id" => $param['id']
+            ":id" => $id
         );
 
         if ($resultado->execute($array)) {
@@ -84,27 +87,30 @@ class Pelicula
 
     public function mostrar()
     {
-        $sql="SELECT peliculas.id, title, description, image, name, price, date, state FROM peliculas 
-        INNER JOIN categorias ON peliculas.category_id = categorias.id ORDER BY peliculas.id DESC";
+        /*$sql="SELECT peliculas.*, categorias.name AS category_title, categorias.id AS category_id FROM `mica`.`peliculas` 
+        INNER JOIN `mica`.`categorias` ON peliculas.category_id = categorias.id ORDER BY peliculas.id DESC";*/
+        
+        $sql="SELECT peliculas.id, title, description, image, name, price, date, state FROM `mica`.`peliculas` 
+        INNER JOIN `mica`.`categorias` ON peliculas.category_id = categorias.id ORDER BY peliculas.id DESC";
+        
 
         $resultado=$this->connect->prepare($sql);
 
-        if($resultado->execute()){
-            return $resultado->fetchAll();
+        if($resultado->execute()){ 
+            return $resultado->fetchAll((\PDO::FETCH_ASSOC));
         }else{
             return false;
         }
     }
     
-
-    public function GetById($id,$param)
+    public function GetById($id)
     {
-        $sql="SELECT * FROM `peliculas` WHERE `id`=:id";
+        $sql="SELECT * FROM `mica`.`peliculas` WHERE `id`=:id";
 
         $resultado=$this->connect->prepare($sql);
         
         $array=array(
-            ":id"=>$param['id']
+            ":id"=>$id
         );
 
         if($resultado->execute($array)){

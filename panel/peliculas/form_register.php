@@ -80,6 +80,7 @@
                                     <select class="form-control" name="category_id" required>
                                         <option value="">--SELECCIONE--</option>
                                         <option value="1">ACCION</option>
+                                        <option value="2">COMEDIA</option>
                                     </select>
                                 </div>
                             </div>
@@ -103,7 +104,7 @@
                             </div>
                         </div>
 
-                        <input type="submit" name="accion" class="btn btn-primary" value="Registrar">
+                        <input type="submit" name="action" class="btn btn-primary" value="Registrar">
                         <a href="index.php" class="btn btn-default">Cancelar</a>
                     </form>
                 </fieldset>

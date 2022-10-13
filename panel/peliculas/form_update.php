@@ -1,3 +1,21 @@
+<?php
+require '../../vendor/autoload.php';
+
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = $_GET['id'];
+
+    $pelicula = new classes\Pelicula;
+    $resultado = $pelicula->GetById($id);
+
+    if(!$resultado){
+        header('Location: index.php');
+    }
+}else {
+    header('Location: index.php');
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,11 +73,12 @@
                 <fieldset>
                     <legend>Datos de la pelicula</legend>
                     <form action="../acciones.php" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="<?php $resultado['id']?>">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Titulo</label>
-                                    <input type="text" name="title" class="form-control" required>
+                                    <input value="<?php print $resultado['title'] ?>" type="text" name="title" class="form-control" required>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +87,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Descripción</label>
-                                    <textarea class="form-control" name="description" id="" cols="3" required></textarea>
+                                    <textarea class="form-control" name="description" id="" cols="3" required><?php print $resultado['description'] ?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -80,6 +99,7 @@
                                     <select class="form-control" name="category_id" required>
                                         <option value="">--SELECCIONE--</option>
                                         <option value="1">ACCION</option>
+                                        <option value="2">COMEDIA</option>
                                     </select>
                                 </div>
                             </div>
@@ -89,7 +109,8 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Imagen</label>
-                                    <input type="file" class="form-control" name="image" required>
+                                    <input type="file" class="form-control" name="image">
+                                    <input type="hidden" name="img_tmp" value="<?php print $resultado['image'] ?>">
                                 </div>
                             </div>
                         </div>
@@ -98,12 +119,12 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Precio</label>
-                                    <input type="text" class="form-control" name="price" placeholder="0.00" required>
+                                    <input value="<?php print $resultado['price'] ?>" type="text" class="form-control" name="price" placeholder="0.00" required>
                                 </div>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <input type="submit" class="btn btn-primary" name="action" value="Actualizar">
                         <a href="index.php" class="btn btn-default">Cancelar</a>
                     </form>
                 </fieldset>
