@@ -1,16 +1,17 @@
 <?php
 require '../../vendor/autoload.php';
+$pelicula = new classes\Pelicula;
+$category = new classes\Categoria; 
 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id = $_GET['id'];
 
-    $pelicula = new classes\Pelicula;
     $resultado = $pelicula->GetById($id);
 
-    if(!$resultado){
+    if (!$resultado) {
         header('Location: index.php');
     }
-}else {
+} else {
     header('Location: index.php');
 }
 
@@ -73,7 +74,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 <fieldset>
                     <legend>Datos de la pelicula</legend>
                     <form action="../acciones.php" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="id" value="<?php $resultado['id']?>">
+                        <input type="hidden" name="id" value="<?php $resultado['id'] ?>">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -98,8 +99,19 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                     <label>Categorias</label>
                                     <select class="form-control" name="category_id" required>
                                         <option value="">--SELECCIONE--</option>
-                                        <option value="1">ACCION</option>
-                                        <option value="2">COMEDIA</option>
+                                        <?php
+                                        $infocategory = $category->mostrar();
+                                        $cantidad = count($infocategory);
+                                        for ($x = 0; $x < $cantidad; $x++) {
+                                            $item = $infocategory[$x];
+                                        ?>
+                                            <option value="<?php print $item['id'] ?>" <?php print $resultado['category_id'] == $item['id'] ? 'selected' : '' ?>>
+                                                <?php print $item['name'] ?>
+                                            </option>
+                                        <?php
+                                        }
+                                        ?>
+
                                     </select>
                                 </div>
                             </div>
@@ -110,7 +122,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                 <div class="form-group">
                                     <label>Imagen</label>
                                     <input type="file" class="form-control" name="image">
-                                    <input type="hidden" name="img_tmp" value="<?php print $resultado['image'] ?>">
+                                    <input type="hidden" name="img_tmp" value="<?php print $resultado['image'] ?>" width="50">
                                 </div>
                             </div>
                         </div>
@@ -126,17 +138,16 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         <input type="submit" class="btn btn-primary" name="action" value="Actualizar">
                         <a href="index.php" class="btn btn-default">Cancelar</a>
+
                     </form>
                 </fieldset>
             </div>
         </div>
-
-
     </div> <!-- /container -->
 
 
     <!-- Bootstrap core JavaScript
-    ================================================== -->
+        ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="../../assets/js/jquery.min.js"></script>
     <script src="../../assets/js/bootstrap.min.js"></script>

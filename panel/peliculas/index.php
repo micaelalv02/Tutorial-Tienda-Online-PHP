@@ -35,11 +35,9 @@
                     <li>
                         <a href="../pedidos/index.php" class="btn">Pedidos</a>
                     </li>
-
                     <li class="active">
                         <a href="index.php" class="btn">Peliculas</a>
                     </li>
-
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -113,7 +111,7 @@
                                         </td>
                                         <td class="text-center">
                                             <a href="../acciones.php?id=<?php print $item['id'] ?>" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-trash"></span></a>
-                                            <a href="form_update.php?id=<? print $item['id'] ?>" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-edit"></span></a>
+                                            <a href="form_update.php?id=<?php print $item['id'] ?>" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-edit"></span></a>
                                         </td>
                                     </tr>
                                 <?php

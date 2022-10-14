@@ -79,8 +79,18 @@
                                     <label>Categorias</label>
                                     <select class="form-control" name="category_id" required>
                                         <option value="">--SELECCIONE--</option>
-                                        <option value="1">ACCION</option>
-                                        <option value="2">COMEDIA</option>
+                                        <?php
+                                        require '../../vendor/autoload.php';
+                                        $category = new classes\Categoria;
+                                        $infocategory = $category->mostrar();
+                                        $cantidad = count($infocategory);
+                                        for ($x = 0; $x < $cantidad; $x++) {
+                                            $item = $infocategory[$x];
+                                        ?>
+                                            <option value="<?php print $item['id'] ?>"><?php print $item['name'] ?></option>
+                                        <?php
+                                        }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
